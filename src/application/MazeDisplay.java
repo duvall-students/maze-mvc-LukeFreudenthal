@@ -68,7 +68,7 @@ public class MazeDisplay extends Application {
 	public void start(Stage stage) {
 		// New Instance of MazeController
 		// Initializing logic state
-		controller = new MazeController(NUM_ROWS, NUM_COLUMNS);
+		controller = new MazeController(NUM_ROWS, NUM_COLUMNS, this);
 		
 		// Initializing the gui
 		myScene = setupScene();
@@ -111,7 +111,7 @@ public class MazeDisplay extends Application {
 
 		Button newMazeButton = new Button("New Maze");
 		newMazeButton.setOnAction(value ->  {
-			newMaze();
+			controller.newMaze();
 		});
 		controls.getChildren().add(newMazeButton);
 
@@ -123,7 +123,7 @@ public class MazeDisplay extends Application {
 
 		Button stepButton = new Button("Step");
 		stepButton.setOnAction(value ->  {
-			this.doOneStep(MILLISECOND_DELAY);
+			this.controller.doOneStep(MILLISECOND_DELAY);
 		});
 		controls.getChildren().add(stepButton);
 		return controls;
@@ -189,15 +189,6 @@ public class MazeDisplay extends Application {
 	}
 	
 	/*
-	 * Re-create the maze from scratch.
-	 * When this happens, we should also stop the search.
-	 */
-	public void newMaze() {
-		controller.newMaze();
-		redraw();
-	}
-
-	/*
 	 * Toggle the pause button
 	 */
 	public void pressPause(){
@@ -236,16 +227,8 @@ public class MazeDisplay extends Application {
 	 */
 	public void step(double elapsedTime){
 		if(!paused) {
-			doOneStep(elapsedTime);
+			controller.doOneStep(elapsedTime);
 		}
-	}
-
-	/*
-	 * Does a step in the search regardless of pause status
-	 */
-	public void doOneStep(double elapsedTime){
-		controller.doOneStep(elapsedTime);
-		redraw();
 	}
 
 	public static void main(String[] args) {
